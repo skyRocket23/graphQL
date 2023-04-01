@@ -1,22 +1,25 @@
-import { users, quotes } from './fakedb.js';
-
+import { quotes, users } from './fakedb.js'
+import { randomBytes } from 'crypto'
 const resolvers = {
     Query: {
-        greet: () => {
-            return "Hello world"
-        },
-        namaste: () => {
-            return "Namaste Doston!"
-        },
-        Users: () => users,
-        Quotes: () => quotes,
-        user: (parent, { id }) => users.find(user => user.id == id),
-        hisQuote: (parent, { id }) => quotes.filter(quotes => quotes.by == id),
+        users: () => users,
+        user: (_, { id }) => users.find(user => user.id == id),
+        quotes: () => quotes,
+        iquote: (_, { by }) => quotes.filter(quote => quote.by == by)
     },
-
     User: {
-        Quotes: (user) => quotes.filter(quotes => quotes.by == user.id)
+        quotes: (ur) => quotes.filter(quote => quote.by == ur.id)
+    },
+    Mutation: {
+        signupUserDummy: (_, { userNew }) => {
+            const id = randomBytes(5).toString("hex")
+            users.push({
+                id,
+                ...userNew
+            })
+            return users.find(user => user.id == id)
+        }
     }
 }
 
-export default resolvers;
+export default resolvers

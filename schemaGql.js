@@ -1,27 +1,31 @@
-
-import { gql } from 'apollo-server'
-
+import { gql } from "apollo-server"
 const typeDefs = gql`
-   type Query{
-       greet:String,
-       namaste:String,
-       Users:[User]
-       user(id:ID!):User
-       Quotes:[Quote]
-       hisQuote(id:ID!):[Quote]
-   }
-   type User{
-       id:ID!
-       firstName:String
-       lastName:String
-       email:String
-       password:String
-       Quotes:[Quote]
-   }
-   type Quote{
-       name:String
-       by:ID
-   }
-`;
-
-export default typeDefs;
+ type Query{
+    users:[User]
+    user(id:ID!):User
+    quotes:[Quote]
+    iquote(by:ID!):[Quote]
+ }
+ type User{
+     id:ID!
+     firstName:String
+     lastName:String
+     email:String
+     password:String
+     quotes:[Quote]
+ }
+ type Quote{
+     name:String
+     by:ID
+ }
+ type Mutation{
+     signupUserDummy(userNew:UserInput!):User
+ }
+ input UserInput{
+    firstName:String!
+    lastName:String!
+    email:String!
+    password:String!
+ }
+`
+export default typeDefs
